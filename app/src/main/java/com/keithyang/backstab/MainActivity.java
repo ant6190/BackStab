@@ -3,6 +3,7 @@ package com.keithyang.backstab;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,6 +13,22 @@ import android.widget.TextView;
 
 public class MainActivity extends ActionBarActivity {
 
+    public Double latitude;
+
+    public Handler handler1;
+    public Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+            Location mLastLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            Double longitude = mLastLocation.getLongitude();
+            latitude = mLastLocation.getLatitude();
+            TextView t=(TextView)findViewById(R.id.TextView01);
+            t.setText(latitude.toString());
+            handler1.postDelayed(this, 1000);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,10 +36,12 @@ public class MainActivity extends ActionBarActivity {
         LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         Location mLastLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         Double longitude = mLastLocation.getLongitude();
-        Double latitude = mLastLocation.getLatitude();
+        latitude = mLastLocation.getLatitude();
         TextView t=new TextView(this);
         t=(TextView)findViewById(R.id.TextView01);
         t.setText(latitude.toString());
+        handler1 = new Handler();
+        handler1.postDelayed(runnable, 1000);
     }
 
 

@@ -52,5 +52,6 @@ public class MainActivity extends ActionBarActivity {
 
     public void buttonLogin(View view) {
         Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
 }

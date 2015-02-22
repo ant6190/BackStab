@@ -38,7 +38,7 @@ public class AttackActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_attack);
         lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         Location mLastLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         if(mLastLocation == null){
@@ -53,7 +53,11 @@ public class AttackActivity extends ActionBarActivity {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
                 Log.d("MainActivity", location.toString());
-                fooobarr.setText(location.toString());
+                if (location != null) {
+                    fooobarr.setText(location.toString());
+                } else {
+                    fooobarr.setText("Location NOT FOUND");
+                }
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {}

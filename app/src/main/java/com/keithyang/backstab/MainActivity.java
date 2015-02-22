@@ -2,6 +2,7 @@ package com.keithyang.backstab;
 
 import android.content.Context;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
@@ -18,6 +19,7 @@ public class MainActivity extends ActionBarActivity {
     public Handler handler1;
     public Double LastLat;
     public Boolean temp;
+    public final TextView t=(TextView)findViewById(R.id.TextView01);
     LocationManager lm;
     public Runnable runnable = new Runnable() {
         @Override
@@ -41,11 +43,22 @@ public class MainActivity extends ActionBarActivity {
         Location mLastLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         longitude = mLastLocation.getLongitude();
         latitude = mLastLocation.getLatitude();
-        TextView t=new TextView(this);
-        t=(TextView)findViewById(R.id.TextView01);
         t.setText(latitude.toString() + " " + longitude.toString());
-        handler1 = new Handler();
-        handler1.postDelayed(runnable, 1000);
+        LocationListener locationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                // Called when a new location is found by the network location provider.
+                t.setText(latitude.toString() + " " + longitude.toString());
+            }
+
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+            public void onProviderEnabled(String provider) {}
+
+            public void onProviderDisabled(String provider) {}
+        };
+
+// Register the listener with the Location Manager to receive location updates
+        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
     }
 
 

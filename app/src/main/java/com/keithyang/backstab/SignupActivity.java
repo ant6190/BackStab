@@ -84,8 +84,6 @@ public class SignupActivity extends Activity implements LoaderCallbacks<Cursor> 
 
         mYearView = (EditText) findViewById(R.id.year);
 
-        mPhoneNumberView = (EditText) findViewById(R.id.phoneNumber);
-
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override

@@ -25,7 +25,7 @@ public class MainActivity extends ActionBarActivity {
             Location mLastLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             longitude = mLastLocation.getLongitude();
             latitude = mLastLocation.getLatitude();
-            TextView t=(TextView)findViewById(R.id.TextView01);
+            TextView t= new TextView(getApplicationContext());
             t.setText(latitude.toString() + " " + longitude.toString());
             handler1.postDelayed(this, 1000);
         }

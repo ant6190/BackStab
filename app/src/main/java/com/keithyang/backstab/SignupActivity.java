@@ -6,17 +6,22 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,6 +32,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +63,7 @@ public class SignupActivity extends Activity implements LoaderCallbacks<Cursor> 
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
 
+    private EditText mNameView;
     private EditText mMajorView;
     private EditText mYearView;
     private EditText mPhoneNumberView;
@@ -64,21 +76,7 @@ public class SignupActivity extends Activity implements LoaderCallbacks<Cursor> 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        populateAutoComplete();
-
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
-            }
-        });
+        mNameView = (EditText) findViewById(R.id.name);
 
         mMajorView = (EditText) findViewById(R.id.major);
 
@@ -112,14 +110,12 @@ public class SignupActivity extends Activity implements LoaderCallbacks<Cursor> 
         }
 
         // Reset errors.
-        mEmailView.setError(null);
-        mPasswordView.setError(null);
+        mNameView.setError(null);
         mMajorView.setError(null);
         mYearView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        String name = mNameView.getText().toString();
         String major = mMajorView.getText().toString();
         String year = mYearView.getText().toString();
 
@@ -127,23 +123,7 @@ public class SignupActivity extends Activity implements LoaderCallbacks<Cursor> 
         View focusView = null;
 
 
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-        }
 
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
-        }
 
         // Check for valid shit
 
@@ -155,7 +135,7 @@ public class SignupActivity extends Activity implements LoaderCallbacks<Cursor> 
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new UserLoginTask(name, year, major);
             mAuthTask.execute((Void) null);
         }
     }
@@ -266,12 +246,32 @@ public class SignupActivity extends Activity implements LoaderCallbacks<Cursor> 
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-        private final String mEmail;
-        private final String mPassword;
+        private String mName;
+        private String mYear;
+        private String mMajor;
+        private String mPhone;
+        private String mLat;
+        private String mLong;
 
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
+        UserLoginTask(String name, String year, String major) {
+            mName = name;
+            mYear = year;
+            mMajor = major;
+            TelephonyManager mTelephonyMgr;
+            mTelephonyMgr = (TelephonyManager)
+            getSystemService(Context.TELEPHONY_SERVICE);
+            String number = mTelephonyMgr.getLine1Number();
+            mPhone = number.substring(2);
+            LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+            Location mLastLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if(mLastLocation == null){
+                mLastLocation = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            }
+            Double lat = mLastLocation.getLatitude();
+            Double lon = mLastLocation.getLongitude();
+            mLat = lat.toString();
+            mLong = lon.toString();
+
         }
 
         @Override
@@ -280,17 +280,16 @@ public class SignupActivity extends Activity implements LoaderCallbacks<Cursor> 
 
             try {
                 // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpGet request = new HttpGet();
+                URI website = new URI("http://52.10.137.240:8888/createnewplayer/@Name=" + mName + "&Major=" + mMajor + "&Year=" + mYear + "&Id=" + mPhone + "&Coordinates=" + mLat + "," + mLong);
+                Log.d("SignupActivity",website.toString());
+                request.setURI(website);
+                HttpResponse response = httpclient.execute(request);
+                Intent intent = new Intent(SignupActivity.this, AttackActivity.class);
+                startActivity(intent);
+            } catch (Exception e) {
                 return false;
-            }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
             }
 
             // TODO: register the new account here.
@@ -299,16 +298,7 @@ public class SignupActivity extends Activity implements LoaderCallbacks<Cursor> 
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
 
-            if (success) {
-                Intent intent = new Intent(SignupActivity.this, AttackActivity.class);
-                startActivity(intent);
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
         }
 
         @Override

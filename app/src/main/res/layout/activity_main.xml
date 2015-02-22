@@ -28,7 +28,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:text="@string/button_join"
-            android:onClick=""
+            android:onClick="buttonJoin"
             android:textSize="18sp"
             android:padding="24dp"
             android:layout_weight="1"

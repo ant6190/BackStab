@@ -72,7 +72,7 @@ public class MainActivity extends ActionBarActivity {
         new CheckNum().execute(number);
     }
 
-    public void buttonSignUp(View view) {
+    public void buttonJoin(View view) {
         Intent intent = new Intent(this, SignupActivity.class);
         startActivity(intent);
     }

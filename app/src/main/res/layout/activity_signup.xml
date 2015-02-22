@@ -5,15 +5,26 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.keithyang.backstab.SignupActivity">
+    tools:context="com.keithyang.backstab.SignupActivity"
+    android:id="@+id/"
+    android:background="#ff510e0e">
 
     <!-- Login progress -->
+    <ImageView
+        android:layout_width="281dp"
+        android:layout_height="167dp"
+        android:id="@+id/imageView"
+        android:layout_gravity="center_horizontal"
+        android:src="@mipmap/bloodySword" />
+
     <ProgressBar android:id="@+id/login_progress" style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:layout_marginBottom="8dp" android:visibility="gone" />
 
     <ScrollView android:id="@+id/login_form" android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="462dp"
+        android:fillViewport="false"
+        android:background="ff510e0e">
 
         <LinearLayout android:id="@+id/email_login_form" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:orientation="vertical">
@@ -48,11 +59,12 @@
                 android:maxLines="1"
                 android:singleLine="true"/>
 
-
             <Button android:id="@+id/email_sign_in_button" style="?android:textAppearanceSmall"
-                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
                 android:layout_marginTop="16dp" android:text="@string/action_sign_in"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal" />
+
 
         </LinearLayout>
     </ScrollView>

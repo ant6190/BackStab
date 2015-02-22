@@ -16,6 +16,7 @@ public class MainActivity extends ActionBarActivity {
     public Double latitude;
 
     public Handler handler1;
+    public Integer temp = 0;
     public Runnable runnable = new Runnable() {
         @Override
         public void run() {
@@ -24,7 +25,8 @@ public class MainActivity extends ActionBarActivity {
             Double longitude = mLastLocation.getLongitude();
             latitude = mLastLocation.getLatitude();
             TextView t=(TextView)findViewById(R.id.TextView01);
-            t.setText(latitude.toString());
+            t.setText(temp.toString());
+            temp++;
             handler1.postDelayed(this, 1000);
         }
     };

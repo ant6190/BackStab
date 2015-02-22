@@ -27,7 +27,7 @@ public class MainActivity extends ActionBarActivity {
             longitude = mLastLocation.getLongitude();
             latitude = mLastLocation.getLatitude();
             temp = !(LastLat == latitude);
-            TextView t= new TextView(getApplicationContext());
+            TextView t=(TextView)findViewById(R.id.TextView01);
             t.setText(temp.toString());
             handler1.postDelayed(this, 1000);
         }
@@ -42,7 +42,7 @@ public class MainActivity extends ActionBarActivity {
         longitude = mLastLocation.getLongitude();
         latitude = mLastLocation.getLatitude();
         TextView t=new TextView(this);
-            t=(TextView)findViewById(R.id.TextView01);
+        t=(TextView)findViewById(R.id.TextView01);
         t.setText(latitude.toString() + " " + longitude.toString());
         handler1 = new Handler();
         handler1.postDelayed(runnable, 1000);

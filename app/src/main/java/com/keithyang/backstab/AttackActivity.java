@@ -1,16 +1,32 @@
 package com.keithyang.backstab;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URI;
 
 
 public class AttackActivity extends ActionBarActivity {
@@ -55,9 +71,11 @@ public class AttackActivity extends ActionBarActivity {
                 Log.d("MainActivity", location.toString());
                 if (location != null) {
                     fooobarr.setText(location.toString());
+
                 } else {
                     fooobarr.setText("Location NOT FOUND");
                 }
+
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {}
@@ -105,4 +123,103 @@ public class AttackActivity extends ActionBarActivity {
     }
 
 
+    /**
+     * Murder target
+     */
+
+    public void scanArea(View view){
+        TelephonyManager mTelephonyMgr;
+        mTelephonyMgr = (TelephonyManager)
+        getSystemService(Context.TELEPHONY_SERVICE);
+        String number = mTelephonyMgr.getLine1Number();
+        number = number.substring(2);
+        gameArea temp = new gameArea(number);
+        temp.execute((Void) null);
+
+    }
+    private class gameArea extends AsyncTask<Void, Void, Boolean>{
+
+        private String mId;
+        private String otherId;
+
+        gameArea(String id){
+            mId = id;
+        }
+
+        protected Boolean doInBackground(Void... params) {
+            // TODO: attempt authentication against a network service.
+
+            try {
+                // Simulate network access.
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpGet request = new HttpGet();
+                URI website = new URI("http://52.10.137.240:8888/getplayerbyId/" + mId);
+                Log.d("SignupActivity", website.toString());
+                request.setURI(website);
+                HttpResponse response = httpclient.execute(request);
+                HttpEntity httpEntity = response.getEntity();
+                if (httpEntity != null) {
+                    InputStream inputStream = httpEntity.getContent();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                    StringBuilder stringBuilder = new StringBuilder();
+
+                    String ligneLue = bufferedReader.readLine();
+                    while (ligneLue != null) {
+                        stringBuilder.append(ligneLue + " \n");
+                        ligneLue = bufferedReader.readLine();
+                    }
+                    bufferedReader.close();
+
+                    JSONObject jsonObject = new JSONObject(stringBuilder.toString());
+                    otherId = jsonObject.getString("id");
+                    httpclient = new DefaultHttpClient();
+                    request = new HttpGet();
+                    website = new URI("http://52.10.137.240:8888/getplayerbyId/" + otherId);
+                    request.setURI(website);
+                    response = httpclient.execute(request);
+                    httpEntity = response.getEntity();
+                    if (httpEntity != null) {
+                        inputStream = httpEntity.getContent();
+                        bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                        stringBuilder = new StringBuilder();
+                        ligneLue = bufferedReader.readLine();
+                        while (ligneLue != null) {
+                            stringBuilder.append(ligneLue + " \n");
+                            ligneLue = bufferedReader.readLine();
+                        }
+                        bufferedReader.close();
+                        JSONObject jsonObject2 = new JSONObject(stringBuilder.toString());
+                        String player2C = jsonObject2.get("co-ordinates").toString();
+                        int index = player2C.indexOf(",");
+                        Double player2Lat = Double.parseDouble(player2C.substring(0, index - 1));
+                        Double player2Long = Double.parseDouble(player2C.substring(index + 1));
+                        lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                        Location mLastLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        if (mLastLocation == null) {
+                            mLastLocation = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                        }
+                        Double longitude = mLastLocation.getLongitude();
+                        Double latitude = mLastLocation.getLatitude();
+                        if (Math.abs(latitude - player2Lat) < 0.0000005 && Math.abs(latitude - player2Lat) < 0.0000005) {
+                            httpclient = new DefaultHttpClient();
+                            request = new HttpGet();
+                            website = new URI("http://52.10.137.240:8888/deleteplayerbyId/" + mId);
+                            request.setURI(website);
+                            response = httpclient.execute(request);
+                        }
+                    }
+
+
+                }
+            } catch (Exception e) {
+                return false;
+            }
+
+            return true;
+        }
+
+        protected void onPostExecute(final Boolean success) {
+
+        }
+    }
 }

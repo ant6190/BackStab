@@ -98,10 +98,8 @@ public class MainActivity extends ActionBarActivity {
                     line += temp;
                 }
                     Log.d("MainActivity", line);
-                    if(line.contains(number)) {
                         Intent intent = new Intent(MainActivity.this, AttackActivity.class);
                         startActivity(intent);
-                    }
             }catch(Exception e){
                 new AlertDialog.Builder(MainActivity.this)
                         .setTitle("Number not found")

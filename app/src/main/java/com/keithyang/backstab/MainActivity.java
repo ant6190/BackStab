@@ -58,7 +58,7 @@ public class MainActivity extends ActionBarActivity {
         };
 
 // Register the listener with the Location Manager to receive location updates
-        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, locationListener);
     }
 
 

@@ -14,7 +14,7 @@
         android:layout_height="191dp"
         android:id="@+id/imageView3"
         android:layout_gravity="center_horizontal"
-        android:src="@mipmap/bloodySword" />
+        android:src="@mipmap/bloodysword" />
 
     <ProgressBar android:id="@+id/login_progress" style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content" android:layout_height="wrap_content"

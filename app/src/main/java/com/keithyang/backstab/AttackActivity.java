@@ -103,4 +103,6 @@ public class AttackActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }

@@ -48,14 +48,6 @@
                 android:maxLines="1"
                 android:singleLine="true"/>
 
-            <EditText
-                android:id="@+id/phoneNumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Phone No."
-                android:inputType="phone"
-                android:maxLines="1"
-                android:singleLine="true"/>
 
             <Button android:id="@+id/email_sign_in_button" style="?android:textAppearanceSmall"
                 android:layout_width="match_parent" android:layout_height="wrap_content"

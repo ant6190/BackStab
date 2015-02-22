@@ -118,14 +118,12 @@ public class SignupActivity extends Activity implements LoaderCallbacks<Cursor> 
         mPasswordView.setError(null);
         mMajorView.setError(null);
         mYearView.setError(null);
-        mPhoneNumberView.setError(null);
 
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
         String major = mMajorView.getText().toString();
         String year = mYearView.getText().toString();
-        String phoneNumber = mPhoneNumberView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;

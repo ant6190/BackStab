@@ -7,6 +7,7 @@ import android.location.LocationManager;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -19,9 +20,9 @@ public class MainActivity extends ActionBarActivity {
     public Handler handler1;
     public Double LastLat;
     public Boolean temp;
-    public final TextView t=(TextView)findViewById(R.id.TextView01);
+    public TextView fooobarr;
     LocationManager lm;
-    public Runnable runnable = new Runnable() {
+   /* public Runnable runnable = new Runnable() {
         @Override
         public void run() {
             Location mLastLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -29,11 +30,10 @@ public class MainActivity extends ActionBarActivity {
             longitude = mLastLocation.getLongitude();
             latitude = mLastLocation.getLatitude();
             temp = !(LastLat == latitude);
-            TextView t=(TextView)findViewById(R.id.TextView01);
-            t.setText(temp.toString());
+            fooobarr.setText(temp.toString());
             handler1.postDelayed(this, 1000);
         }
-    };
+    };*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +41,19 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         Location mLastLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        longitude = mLastLocation.getLongitude();
-        latitude = mLastLocation.getLatitude();
-        t.setText(latitude.toString() + " " + longitude.toString());
+        if(mLastLocation == null){
+            mLastLocation = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        }
+        //longitude = mLastLocation.getLongitude();
+        //latitude = mLastLocation.getLatitude();
+        fooobarr =(TextView)findViewById(R.id.TextView01);
+        //fooobarr.setText("hell");
+
         LocationListener locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
-                t.setText(latitude.toString() + " " + longitude.toString());
+                Log.d("MainActivity",location.toString());
+                fooobarr.setText(location.toString());
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {}
@@ -57,8 +63,18 @@ public class MainActivity extends ActionBarActivity {
             public void onProviderDisabled(String provider) {}
         };
 
+
 // Register the listener with the Location Manager to receive location updates
-        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, locationListener);
+        mLastLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if(mLastLocation != null){
+            Log.d("MainActivity","gps");
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationListener);
+        }
+        mLastLocation = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        if(mLastLocation != null) {
+            Log.d("MainActivity","network");
+            lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, locationListener);
+        }
     }
 
 

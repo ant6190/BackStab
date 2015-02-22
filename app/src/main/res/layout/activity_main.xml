@@ -23,7 +23,8 @@
             android:textSize="18sp"
             android:padding="24dp"
             android:layout_weight="1"
-            />
+            android:background="#ffea0008"
+            android:textColor="#ffffff" />
 
         <Button
             android:id="@+id/join"
@@ -34,7 +35,8 @@
             android:textSize="18sp"
             android:padding="24dp"
             android:layout_weight="1"
-            />
+            android:background="#ffea0008"
+            android:textColor="#ffffff" />
     </LinearLayout>
 
     <ImageView

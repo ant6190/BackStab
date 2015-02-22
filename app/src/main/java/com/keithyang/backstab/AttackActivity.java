@@ -21,6 +21,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.codehaus.jackson.node.BooleanNode;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -71,6 +72,16 @@ public class AttackActivity extends ActionBarActivity {
                 Log.d("MainActivity", location.toString());
                 if (location != null) {
                     fooobarr.setText(location.toString());
+                    TelephonyManager mTelephonyMgr;
+                    mTelephonyMgr = (TelephonyManager)
+                            getSystemService(Context.TELEPHONY_SERVICE);
+                    String number = mTelephonyMgr.getLine1Number();
+                    number = number.substring(2);
+                    Double lat = location.getLatitude();
+                    Double lon = location.getLongitude();
+                    String url = "http://52.10.137.240:8888/updatecoordinatesbyId/" + number + "/@" + lat.toString() + ","  + lon.toString();
+                    sendCor temp2 = new sendCor(url);
+                    temp2.execute((Void) null);
 
                 } else {
                     fooobarr.setText("Location NOT FOUND");
@@ -136,6 +147,31 @@ public class AttackActivity extends ActionBarActivity {
         gameArea temp = new gameArea(number);
         temp.execute((Void) null);
 
+    }
+
+    private class sendCor extends  AsyncTask<Void, Void, Boolean>{
+
+        private String url;
+
+        sendCor(String Murl){
+            url = Murl;
+        }
+
+        protected Boolean doInBackground(Void... params){
+            try {
+                // Simulate network access.
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpGet request = new HttpGet();
+                URI website = new URI(url);
+                Log.d("SignupActivity", website.toString());
+                request.setURI(website);
+                HttpResponse response = httpclient.execute(request);
+            }
+            catch (Exception e) {
+                return false;
+            }
+           return true;
+        }
     }
     private class gameArea extends AsyncTask<Void, Void, Boolean>{
 

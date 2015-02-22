@@ -18,10 +18,10 @@ public class MainActivity extends ActionBarActivity {
     public Handler handler1;
     public Double LastLat;
     public Boolean temp;
+    LocationManager lm;
     public Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
             Location mLastLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             LastLat = latitude;
             longitude = mLastLocation.getLongitude();
@@ -37,12 +37,12 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         Location mLastLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         longitude = mLastLocation.getLongitude();
         latitude = mLastLocation.getLatitude();
         TextView t=new TextView(this);
-        t=(TextView)findViewById(R.id.TextView01);
+            t=(TextView)findViewById(R.id.TextView01);
         t.setText(latitude.toString() + " " + longitude.toString());
         handler1 = new Handler();
         handler1.postDelayed(runnable, 1000);

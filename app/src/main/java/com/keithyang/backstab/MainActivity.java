@@ -14,19 +14,19 @@ import android.widget.TextView;
 public class MainActivity extends ActionBarActivity {
 
     public Double latitude;
-
+    public Double longitude;
     public Handler handler1;
-    public Integer temp = 0;
+    public Double LastLat;
+    public Boolean temp;
     public Runnable runnable = new Runnable() {
         @Override
         public void run() {
             LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
             Location mLastLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            Double longitude = mLastLocation.getLongitude();
+            longitude = mLastLocation.getLongitude();
             latitude = mLastLocation.getLatitude();
             TextView t=(TextView)findViewById(R.id.TextView01);
-            t.setText(temp.toString());
-            temp++;
+            t.setText(latitude.toString() + " " + longitude.toString());
             handler1.postDelayed(this, 1000);
         }
     };
@@ -37,11 +37,11 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         Location mLastLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        Double longitude = mLastLocation.getLongitude();
+        longitude = mLastLocation.getLongitude();
         latitude = mLastLocation.getLatitude();
         TextView t=new TextView(this);
         t=(TextView)findViewById(R.id.TextView01);
-        t.setText(latitude.toString());
+        t.setText(latitude.toString() + " " + longitude.toString());
         handler1 = new Handler();
         handler1.postDelayed(runnable, 1000);
     }

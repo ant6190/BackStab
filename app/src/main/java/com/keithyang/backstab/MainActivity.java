@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -67,23 +68,44 @@ public class MainActivity extends ActionBarActivity {
         mTelephonyMgr = (TelephonyManager)
         getSystemService(Context.TELEPHONY_SERVICE);
         String number = mTelephonyMgr.getLine1Number();
-        try{
-            HttpClient httpclient = new DefaultHttpClient();
+        number = number.substring(2);
+        new CheckNum().execute(number);
+    }
 
-            HttpGet request = new HttpGet();
-            URI website = new URI("52.10.137.240:8888/getplayerbyid/" + number);
-            request.setURI(website);
-            HttpResponse response = httpclient.execute(request);
-            BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-            String line = in.readLine();
-            if(line.contains(number)){
-                Intent intent = new Intent(this, AttackActivity.class);
-                startActivity(intent);
-            }
-            else{
-                new AlertDialog.Builder(this)
-                        .setTitle("No Number")
-                        .setMessage("That number isn't in the system!")
+    public void buttonSignUp(View view) {
+        Intent intent = new Intent(this, SignupActivity.class);
+        startActivity(intent);
+    }
+
+    private class CheckNum extends AsyncTask<String, String, String>{
+
+        private Exception exception;
+
+        protected String doInBackground(String... urls){
+            try{
+                String number = urls[0];
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpGet request = new HttpGet();
+                URI website = new URI("http://52.10.137.240:8888/getplayerbyid/" + number);
+                request.setURI(website);
+                HttpResponse response = httpclient.execute(request);
+                BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+                String line = in.readLine();
+                line = in.readLine();
+                String temp = "";
+                while(temp != null){
+                    temp = in.readLine();
+                    line += temp;
+                }
+                    Log.d("MainActivity", line);
+                    if(line.contains(number)) {
+                        Intent intent = new Intent(MainActivity.this, AttackActivity.class);
+                        startActivity(intent);
+                    }
+            }catch(Exception e){
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("Number not found")
+                        .setMessage("You aren't in the system!")
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 // continue with delete
@@ -92,14 +114,7 @@ public class MainActivity extends ActionBarActivity {
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
             }
-
-        }catch(Exception e){
-            Log.e("log_tag", "Error in http connection "+e.toString());
+            return "";
         }
-    }
-
-    public void buttonSignUp(View view) {
-        Intent intent = new Intent(this, SignupActivity.class);
-        startActivity(intent);
     }
 }

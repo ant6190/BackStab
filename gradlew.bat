@@ -7,8 +7,7 @@
 
 @rem Set local scope for the variables with windows NT shell
 if "%OS%"=="Windows_NT" setlocal
-
-@rem Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
+		@rem Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
 set DEFAULT_JVM_OPTS=
 
 set DIRNAME=%~dp0
@@ -21,7 +20,7 @@ if defined JAVA_HOME goto findJavaFromJavaHome
 
 set JAVA_EXE=java.exe
 %JAVA_EXE% -version >NUL 2>&1
-if "%ERRORLEVEL%" == "0" goto init
+ if "%ERRORLEVEL%" == "0" goto init
 
 echo.
 echo ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH.
@@ -53,16 +52,14 @@ if "%@eval[2+2]" == "4" goto 4NT_args
 
 :win9xME_args
 @rem Slurp the command line arguments.
-set CMD_LINE_ARGS=
+	set CMD_LINE_ARGS=
 set _SKIP=2
 
 :win9xME_args_slurp
 if "x%~1" == "x" goto execute
-
-set CMD_LINE_ARGS=%*
+                set CMD_LINE_ARGS=%*
 goto execute
-
-:4NT_args
+          :4NT_args
 @rem Get arguments from the 4NT Shell from JP Software
 set CMD_LINE_ARGS=%$
 
@@ -86,5 +83,4 @@ exit /b 1
 
 :mainEnd
 if "%OS%"=="Windows_NT" endlocal
-
 :omega

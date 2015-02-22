@@ -7,7 +7,7 @@ import android.location.LocationManager;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
+//import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -22,8 +22,8 @@ public class AttackActivity extends ActionBarActivity {
     public Boolean temp;
     public TextView fooobarr;
     LocationManager lm;
-   /* public Runnable runnable = new Runnable() {
-        @Override
+	/* public Runnable runnable = new Runnable() {
+          @Override
         public void run() {
             Location mLastLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             LastLat = latitude;
@@ -32,7 +32,7 @@ public class AttackActivity extends ActionBarActivity {
             temp = !(LastLat == latitude);
             fooobarr.setText(temp.toString());
             handler1.postDelayed(this, 1000);
-        }
+//          }
     };*/
 
     @Override
@@ -61,8 +61,7 @@ public class AttackActivity extends ActionBarActivity {
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-            public void onProviderEnabled(String provider) {}
+			            public void onProviderEnabled(String provider) {}
 
             public void onProviderDisabled(String provider) {}
         };
@@ -98,7 +97,7 @@ public class AttackActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+    return true;
         }
 
         return super.onOptionsItemSelected(item);

@@ -1,6 +1,8 @@
 package com.keithyang.backstab;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
@@ -73,6 +75,23 @@ public class MainActivity extends ActionBarActivity {
             request.setURI(website);
             HttpResponse response = httpclient.execute(request);
             BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            String line = in.readLine();
+            if(line.contains(number)){
+                Intent intent = new Intent(this, AttackActivity.class);
+                startActivity(intent);
+            }
+            else{
+                new AlertDialog.Builder(this)
+                        .setTitle("No Number")
+                        .setMessage("That number isn't in the system!")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // continue with delete
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
 
         }catch(Exception e){
             Log.e("log_tag", "Error in http connection "+e.toString());

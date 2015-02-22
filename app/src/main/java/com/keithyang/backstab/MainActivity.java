@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
@@ -21,12 +22,16 @@ public class MainActivity extends ActionBarActivity {
     public Runnable runnable = new Runnable() {
         @Override
         public void run() {
+            LinearLayout layout = new LinearLayout(getApplicationContext());
+            setContentView(layout);
+            layout.setOrientation(LinearLayout.VERTICAL);
             LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
             Location mLastLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             longitude = mLastLocation.getLongitude();
             latitude = mLastLocation.getLatitude();
             TextView t= new TextView(getApplicationContext());
             t.setText(latitude.toString() + " " + longitude.toString());
+            layout.addView(t);
             handler1.postDelayed(this, 1000);
         }
     };

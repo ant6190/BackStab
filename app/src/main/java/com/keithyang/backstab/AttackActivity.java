@@ -171,7 +171,7 @@ public class AttackActivity extends ActionBarActivity {
                     bufferedReader.close();
 
                     JSONObject jsonObject = new JSONObject(stringBuilder.toString());
-                    otherId = jsonObject.getString("id");
+                    otherId = jsonObject.getString("target_id");
                     httpclient = new DefaultHttpClient();
                     request = new HttpGet();
                     website = new URI("http://52.10.137.240:8888/getplayerbyId/" + otherId);
@@ -200,7 +200,7 @@ public class AttackActivity extends ActionBarActivity {
                         }
                         Double longitude = mLastLocation.getLongitude();
                         Double latitude = mLastLocation.getLatitude();
-                        if (Math.abs(latitude - player2Lat) < 0.0000005 && Math.abs(latitude - player2Lat) < 0.0000005) {
+                        if (Math.abs(latitude - player2Lat) < 1 && Math.abs(latitude - player2Lat) < 1) {
                             httpclient = new DefaultHttpClient();
                             request = new HttpGet();
                             website = new URI("http://52.10.137.240:8888/deleteplayerbyId/" + mId);

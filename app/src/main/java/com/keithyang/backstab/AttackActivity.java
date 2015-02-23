@@ -236,10 +236,11 @@ public class AttackActivity extends ActionBarActivity {
                         }
                         Double longitude = mLastLocation.getLongitude();
                         Double latitude = mLastLocation.getLatitude();
+ 
                         if (Math.abs(latitude - player2Lat) < 1 && Math.abs(latitude - player2Lat) < 1) {
                             httpclient = new DefaultHttpClient();
                             request = new HttpGet();
-                            website = new URI("http://52.10.137.240:8888/deleteplayerbyId/" + mId);
+                            website = new URI("http://52.10.137.240:8888/killplayer/" + mId);
                             request.setURI(website);
                             response = httpclient.execute(request);
                         }
